@@ -1,3 +1,3 @@
-// for(let i= 1 ; i<=5;){
-//     console.log("laggggggggggggggggggggggggggggggg ")
-// }
+for(let i= 1 ; i<=5;){
+    console.log("laggggggggggggggggggggggggggggggg ")
+}
