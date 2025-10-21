@@ -1,23 +1,207 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Temproy shut dwon </title>
-    <style>
-      body {background-color: black;}
-        .container {
-    display: block;
-    width: auto;
-    height: auto;
-}
-    </style>
+  <meta charset="UTF-8" />
+  <title>Music45 - Your Mobile Music App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="description" content="Beautiful mobile music streaming app with dark theme and smooth animations" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="icon" type="image/webp" href="/LOGO.jpg">
+  <!-- Lucide icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.462.0/lucide.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-    <div class="container">
-    <img src="https://inspectioncenteruae.com/img/logo%202.jpg" />
-</div>
-        <script src="script.js"></script>
-</body>
+  <div class="app">
+    <!-- Header -->
+    <div class="header">
+      <h1 class="greeting" id="greeting">Good morning</h1>
+      <div class="header-icons">
+        <button class="icon-button"><i data-lucide="bell"></i></button>
+        <button class="icon-button"><i data-lucide="clock"></i></button>
+        <button class="icon-button"><i data-lucide="settings"></i></button>
+      </div>
+    </div>
 
+    <!-- Main Content -->
+    <div class="main-content" id="main">
+
+      <!-- 🏠 HOME TAB -->
+      <div class="tab-view" id="tab-home">
+
+        <!-- 🎵 Album Detail View -->
+        <div class="album-view" id="album-view" style="display:none;">
+          <div class="album-topbar">
+            <button id="album-back" class="album-back">
+              <i data-lucide="arrow-left"></i>
+            </button>
+          </div>
+          <div class="album-header">
+            <img id="album-cover" src="" alt="Album Cover">
+            <h2 id="album-title">Album Title</h2>
+            <p id="album-artist">Album Artist</p>
+            <button id="album-play" class="play-button"><i data-lucide="play"></i></button>
+          </div>
+          <div class="album-tracks" id="album-tracks"></div>
+        </div>
+
+        <!-- Albums -->
+        <div class="section">
+          <h2 class="section-title">Albums</h2>
+          <div class="horizontal-scroll" id="albums"></div>
+        </div>
+
+        <!-- Recently Played -->
+        <div class="section">
+          <h2 class="section-title">Recently played</h2>
+          <div class="horizontal-scroll" id="recently"></div>
+        </div>
+
+        <!-- New Releases -->
+        <div class="section">
+          <h2 class="section-title">New releases for you</h2>
+          <div class="horizontal-scroll" id="new-releases">
+            <!-- Will be filled dynamically -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 🔎 SEARCH TAB -->
+      <div class="tab-view" id="tab-search" style="display:none;">
+        <div class="search-container">
+          <input type="text" id="search-input" placeholder="Search songs, artists, albums..." />
+          <button id="search-btn"><i data-lucide="search"></i></button>
+        </div>
+        <div class="search-results" id="search-results"></div>
+      </div>
+
+      <!-- 📚 LIBRARY TAB -->
+      <div class="tab-view" id="tab-library" style="display:none;">
+        <h2 class="section-title">Your Library</h2>
+        <p style="color:var(--foreground-muted);padding:12px;">No saved songs yet.</p>
+      </div>
+    </div>
+
+    <!-- Compact Footer -->
+    <div class="compact-footer" id="compact-footer" style="display: none;">
+      <div class="footer-progress">
+        <div class="footer-progress-fill" id="footer-progress-fill"></div>
+      </div>
+      <div class="footer-track-info" id="footer-open-banner">
+        <div class="footer-track-image">
+          <img id="footer-track-image" src="https://music45beta.vercel.app/music/music45.webp" alt="Cover">
+        </div>
+        <div class="footer-track-details">
+          <h4 id="footer-track-title">No song</h4>
+          <p id="footer-track-artist">—</p>
+        </div>
+      </div>
+      <div class="footer-controls">
+        <button class="footer-play-button" id="footer-btn-play">
+          <i data-lucide="play" id="footer-play-icon"></i>
+        </button>
+        <button class="footer-next-button" id="footer-btn-next">
+          <i data-lucide="skip-forward"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Music Banner (Full-Screen Player) -->
+    <div id="music-banner" class="music-banner" style="display:none;">
+      <div class="player-container">
+        <button id="close-banner-btn" class="close-btn"><i data-lucide="chevron-down"></i></button>
+        <!-- Flip Container -->
+        <div class="flip-container">
+          <div id="flip-inner" class="flip-inner">
+            <div class="flip-front">
+              <div class="album-cover">
+                <img id="banner-cover-image" src="" alt="Album Cover">
+                <button id="show-lyrics-btn" class="flip-btn overlay-btn">
+                  <i class="fas fa-music"></i>
+                </button>
+              </div>
+            </div>
+            <div class="flip-back">
+              <div class="lyrics-header">
+                <h3>Lyrics</h3>
+                <button id="show-cover-btn" class="flip-2-btn">
+                  <i data-lucide="image"></i> Show Cover
+                </button>
+              </div>
+              <div id="lyrics-container" class="lyrics-content">
+                <!-- Synced lyrics lines will be added here -->
+              </div>
+              <div id="lyrics-text" class="lyrics-content" style="display: none;">
+                <!-- Plain lyrics fallback -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="song-info">
+          <h2 id="banner-song-title">No song</h2>
+          <p id="banner-artist-name">—</p>
+        </div>
+
+        <div class="progress-container">
+          <div class="progress-bar">
+            <div class="progress-track" id="banner-progress-track">
+              <div class="progress-fill" id="banner-progress-fill"></div>
+              <div class="progress-handle-circle" id="progress-handle-circle"></div>
+            </div>
+          </div>
+          <div class="time-stamps">
+            <span id="current-time">00:00</span>
+            <span id="duration">00:00</span>
+          </div>
+        </div>
+        <div class="main-controls">
+          <button id="shuffle-btn" class="control-button"><i data-lucide="shuffle"></i></button>
+          <button id="banner-prev" class="control-button"><i data-lucide="skip-back"></i></button>
+          <button id="banner-play-pause" class="play-button"><i data-lucide="play" id="banner-play-icon"></i></button>
+          <button id="banner-next" class="control-button"><i data-lucide="skip-forward"></i></button>
+          <button id="repeat-btn" class="control-button"><i data-lucide="repeat"></i></button>
+          <div id="shuffle-popup" class="popup">Shuffle: <span id="shuffle-status">Off</span></div>
+          <div id="repeat-popup" class="popup">Repeat: <span id="repeat-status">Off</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+      <button class="nav-item active" data-tab="home"><i data-lucide="home"></i><span>Home</span></button>
+      <button class="nav-item" data-tab="search"><i data-lucide="search"></i><span>Search</span></button>
+      <button class="nav-item" data-tab="library"><i data-lucide="library"></i><span>Your Library</span></button>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <!-- ⚙️ SETTINGS BOTTOM SHEET -->
+  <div id="settings-sheet" class="settings-sheet">
+    <div class="sheet-header">
+      <div class="drag-line"></div>
+      <h2>Settings</h2>
+      <button id="close-settings"><i data-lucide="x"></i></button>
+    </div>
+    <div class="sheet-body">
+      <h3>Playback Quality</h3>
+      <div class="quality-options">
+        <button class="quality-btn" data-quality="Less_low">Less Low (48 kbps)</button>
+        <button class="quality-btn" data-quality="low">Low (96 kbps)</button>
+        <button class="quality-btn" data-quality="medium">Medium (160 kbps)</button>
+        <button class="quality-btn" data-quality="high">High (320 kbps)</button>
+        <button class="quality-btn" data-quality="auto">Auto (Best)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden audio element -->
+  <audio id="audio"></audio>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <script type="module" src="/src/main.ts"></script>
+</body>
 </html>
